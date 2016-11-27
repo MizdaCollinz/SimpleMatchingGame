@@ -15,6 +15,10 @@ namespace SimpleMatchingGame
         //Clicked Labels
         Label firstClick = null;
         Label secondClick = null;
+        //Time
+        int timeSec = 0;
+        int timeMin = 0;
+        bool timeStarted = false;
 
 
         public Form1()
@@ -64,6 +68,13 @@ namespace SimpleMatchingGame
             Label clickedLabel = sender as Label;
             if (clickedLabel != null)
             {
+                //Start gametime
+                if (!timeStarted)
+                {
+                    timeStarted = true;
+                    timer2.Start();
+                }
+
                 //Already black, ignore
                 //Hidden, reveal
                 if (clickedLabel.ForeColor == Color.Black)
@@ -130,8 +141,33 @@ namespace SimpleMatchingGame
             }
 
             //Loop didn't call return, success all icons are matched
-            MessageBox.Show("You matched all the icons!", "You are Victorious!");
+            timer2.Stop();
+            MessageBox.Show("You matched all the icons in " + label17.Text + "!", "You are Victorious!");
             Close();
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            timeSec++;
+            if(timeSec == 60)
+            {
+                timeMin++;
+                timeSec = 0;
+            }
+
+            //Update the label to match the time
+            String seconds = timeSec + "";
+            if (timeSec < 10)
+            {
+                seconds = "0" + seconds;
+            }
+
+            label17.Text = "Play Time: " + timeMin + ":" + seconds;
         }
     }
 }
